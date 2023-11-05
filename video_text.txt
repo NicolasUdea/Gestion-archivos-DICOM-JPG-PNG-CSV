@@ -1,0 +1,23 @@
+El código define una clase llamada DICOM que se utiliza para trabajar con archivos DICOM, que son un formato común para imágenes médicas.
+
+1. Inicialización (__init__): Cuando se crea una instancia de la clase DICOM, se le pasa una ruta a un directorio que contiene archivos DICOM. La función os.listdir se utiliza para obtener una lista de todos los archivos en ese directorio. Luego, para cada archivo, se utiliza la biblioteca pydicom para leer el archivo DICOM y se añade a la lista self.__ds. También se crea una lista de metadatos para cada archivo DICOM.
+
+2. Obtener metadatos (get_table_metadata): Este método toma un índice de archivo como argumento y devuelve una tabla de metadatos para ese archivo DICOM. Los metadatos son simplemente información sobre el archivo DICOM, como el tipo de imagen, la fecha de creación, etc.
+
+3. Anonimizar información del paciente (anonymize_patient_info): Este método toma un índice de archivo como argumento y anonimiza la información del paciente en ese archivo DICOM. Primero, imprime la información del paciente. Luego, reemplaza la información del paciente con valores ficticios y guarda el archivo DICOM modificado en un directorio llamado ‘anon’.
+
+4. Anonimizar directorio (anonymize_directory): Este método toma como argumentos un directorio de entrada y un directorio de salida. Anonimiza todos los archivos DICOM en el directorio de entrada y los guarda en el directorio de salida.
+
+5. Ecualizar imagen (equalize_image): Este método toma un índice de archivo como argumento y ecualiza el histograma de la matriz de la imagen, añade el texto ‘imagen ecualizada’ y guarda la imagen. Primero, extrae la matriz de la imagen del archivo DICOM. Luego, aplica la ecualización del histograma a la matriz de la imagen utilizando la función cv2.equalizeHist. Después, convierte la matriz de la imagen en una imagen PIL para dibujar el texto. Dibuja la imagen y añade el texto ‘imagen ecualizada’ en la parte superior de la imagen. Finalmente, guarda la imagen en un directorio llamado ‘equalized’.
+
+6. Comparar imágenes (compare_images): Este método toma un índice de archivo como argumento y crea una figura con dos subplots para comparar la imagen original y la imagen ecualizada. Primero, extrae la matriz de la imagen del archivo DICOM y aplica la ecualización del histograma. Luego, convierte la matriz de la imagen en una imagen PIL. Después, crea una figura con dos subplots. En el primer subplot, muestra la imagen original y en el segundo subplot, muestra la imagen ecualizada. Finalmente, guarda la figura en un directorio llamado ‘equalized’.
+
+El código define una clase llamada CELLS que se utiliza para trabajar con imágenes en formato JPEG.
+
+1. Inicialización (__init__): Cuando se crea una instancia de la clase CELLS, se le pasa una ruta a un directorio que contiene imágenes JPEG. La función os.listdir se utiliza para obtener una lista de todos los archivos en ese directorio. Luego, para cada archivo, se utiliza la biblioteca cv2 para leer la imagen y se añade a la lista self.__images.
+
+2. Crear histograma (create_histogram): Este método toma un índice de archivo como argumento y crea un histograma de la matriz de la imagen. Los histogramas son una representación gráfica de la distribución de intensidades de píxeles en una imagen. Este método muestra el histograma en una nueva ventana.
+
+3. Escalar y recortar (scale_and_crop): Este método toma un índice de archivo y varios parámetros para escalar y recortar la imagen. Primero, escala la imagen al porcentaje especificado. Luego, recorta la imagen a las dimensiones especificadas. Finalmente, guarda la imagen modificada en un directorio llamado ‘modified_cells’.
+
+4. Comparar imágenes (compare_images): Este método toma un índice de archivo y varios parámetros para escalar y recortar la imagen. Primero, escala la imagen al porcentaje especificado. Luego, recorta la imagen a las dimensiones especificadas. Después, crea una figura con dos subplots: el primero muestra la imagen original y el segundo muestra la imagen recortada. Finalmente, guarda la figura en un directorio llamado ‘modified_cells’.
