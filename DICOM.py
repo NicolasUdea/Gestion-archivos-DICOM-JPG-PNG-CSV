@@ -1,5 +1,10 @@
+import matplotlib.pyplot as plt
+from PIL import Image
+import numpy as np
 import pydicom
+import cv2
 import os
+
 
 class DICOM:
     def __init__(self, path):
@@ -38,7 +43,7 @@ class DICOM:
             if tag in ds:
                 print(f"{tag}: {ds.data_element(tag).value}")
                 if tag == 'PatientBirthDate':
-                    ds.data_element(tag).value = "19000101"  # Use a dummy date
+                    ds.data_element(tag).value = "00000000"  # Use a dummy date
                 elif tag == 'PatientSex':
                     ds.data_element(tag).value = "O"  # Use 'O' (Other) for sex
                 else:
@@ -57,7 +62,7 @@ class DICOM:
                     for tag in self.patient_info_tags:
                         if tag in ds:
                             if tag == 'PatientBirthDate':
-                                ds.data_element(tag).value = "19000101"  # Use a dummy date
+                                ds.data_element(tag).value = "00000000"  # Use a dummy date
                             elif tag == 'PatientSex':
                                 ds.data_element(tag).value = "O"  # Use 'O' (Other) for sex
                             else:
@@ -65,6 +70,36 @@ class DICOM:
                     ds.save_as(os.path.join(output_dir, f"anonymized_{file}"))
         print(f"All DICOM files in {input_dir} have been anonymized and saved to {output_dir}.")
 
+    def equalize_image(self, file=0):
+        """Equalizes the histogram of the image matrix, adds 'imagen ecualizada' text, and saves the image."""
+        ds = self.__ds[file]
+        img_array = ds.pixel_array  # Extract the image matrix
+
+        # Apply histogram equalization
+        img_array_equalized = cv2.equalizeHist(img_array.astype(np.uint8))
+
+        # Convert to PIL Image for drawing text
+        img_pil = Image.fromarray(img_array_equalized)
+
+        # Draw 'imagen ecualizada' on the image
+        plt.imshow(img_pil, cmap=plt.cm.bone)
+
+        # Define the text properties
+        text = 'imagen ecualizada'
+        position = (img_pil.width // 2, 20)  # Adjust the y-coordinate to place the text at the top
+        color = 'black'
+        size = 20
+        weight = 'bold'
+        box_color = 'lime'
+
+        # Add the text to the image
+        plt.text(*position, text, color=color, fontsize=size, weight=weight,
+                 bbox=dict(facecolor=box_color, alpha=0.5, edgecolor='black'), ha='center')
+
+        # Save the image
+        plt.savefig(f'equalized/equalized_{file}.png')
+        print(f"Equalized image saved as equalized_{file}.png")
+
+
 test = DICOM('datos/Sarcoma/')
-test.anonymize_patient_info()
-test.anonymize_directory('datos/Sarcoma/', 'anon/')
+test.equalize_image()
