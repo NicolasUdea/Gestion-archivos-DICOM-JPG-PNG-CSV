@@ -43,7 +43,7 @@ class DICOM:
             if tag in ds:
                 print(f"{tag}: {ds.data_element(tag).value}")
                 if tag == 'PatientBirthDate':
-                    ds.data_element(tag).value = "00000000"  # Use a dummy date
+                    ds.data_element(tag).value = "19000100"  # Use a dummy date
                 elif tag == 'PatientSex':
                     ds.data_element(tag).value = "O"  # Use 'O' (Other) for sex
                 else:
@@ -62,7 +62,7 @@ class DICOM:
                     for tag in self.patient_info_tags:
                         if tag in ds:
                             if tag == 'PatientBirthDate':
-                                ds.data_element(tag).value = "00000000"  # Use a dummy date
+                                ds.data_element(tag).value = "19000100"  # Use a dummy date
                             elif tag == 'PatientSex':
                                 ds.data_element(tag).value = "O"  # Use 'O' (Other) for sex
                             else:
@@ -125,8 +125,3 @@ class DICOM:
         # Save the figure
         plt.savefig(f'equalized/comparison_{file}.png')
         print(f"Comparison image saved as comparison_{file}.png")
-
-
-test = DICOM('datos/Sarcoma/')
-test.equalize_image()
-test.compare_images()

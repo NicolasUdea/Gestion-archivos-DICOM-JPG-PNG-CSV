@@ -66,9 +66,3 @@ class CELLS:
         # Save the figure
         plt.savefig(f'modified_cells/comparison_{self.__image_names[file]}')
         print(f"Comparison image saved as comparison_{self.__image_names[file]}")
-
-
-cell = CELLS('cells')
-cell.create_histogram()
-cell.scale_and_crop()
-cell.compare_images()
