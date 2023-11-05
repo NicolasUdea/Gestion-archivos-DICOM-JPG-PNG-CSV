@@ -82,7 +82,7 @@ class DICOM:
         img_pil = Image.fromarray(img_array_equalized)
 
         # Draw 'imagen ecualizada' on the image
-        plt.imshow(img_pil, cmap=plt.cm.bone)
+        plt.imshow(img_pil, cmap='bone')  # Use 'bone' as a string
 
         # Define the text properties
         text = 'imagen ecualizada'
@@ -100,6 +100,33 @@ class DICOM:
         plt.savefig(f'equalized/equalized_{file}.png')
         print(f"Equalized image saved as equalized_{file}.png")
 
+    def compare_images(self, file=0):
+        """Creates a figure with two subplots to compare the original and equalized images."""
+        ds = self.__ds[file]
+        img_array = ds.pixel_array  # Extract the image matrix
+
+        # Apply histogram equalization
+        img_array_equalized = cv2.equalizeHist(img_array.astype(np.uint8))
+
+        # Convert to PIL Image for drawing text
+        img_pil = Image.fromarray(img_array_equalized)
+
+        # Create a figure with two subplots
+        fig, axs = plt.subplots(1, 2, figsize=(10, 5))
+
+        # Display the original image in the first subplot
+        axs[0].imshow(img_array, cmap='bone')  # Use 'bone' as a string
+        axs[0].set_title('Imagen Original')
+
+        # Display the equalized image in the second subplot
+        axs[1].imshow(img_pil, cmap='bone')  # Use 'bone' as a string
+        axs[1].set_title('Imagen Ecualizada')
+
+        # Save the figure
+        plt.savefig(f'equalized/comparison_{file}.png')
+        print(f"Comparison image saved as comparison_{file}.png")
+
 
 test = DICOM('datos/Sarcoma/')
 test.equalize_image()
+test.compare_images()
